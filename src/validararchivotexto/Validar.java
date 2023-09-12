@@ -5,7 +5,6 @@
 package validararchivotexto;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.regex.Pattern;
@@ -16,34 +15,31 @@ import javax.swing.JOptionPane;
  * @author Mariana M
  */
 public class Validar {
-    
-    public void mostrarArchivo(String archivo) 
-    {
-      String linea, texto="";
-      try(BufferedReader leer= new BufferedReader(new FileReader(archivo)))
+
+    public void mostrarArchivo(String archivo) {
+        String linea;
+        try ( BufferedReader leer = new BufferedReader(new FileReader(archivo)))
         {
-            
-            while((linea=leer.readLine())!=null)
+
+            while ((linea = leer.readLine()) != null)
             {
-                System.out.println(linea+"\n");
+                System.out.println(linea + "\n");
             }
             leer.close();
-            
-        }catch(IOException e)
+
+        } catch (IOException e)
         {
             e.printStackTrace();
-            
+
         }
-        
-       // JOptionPane.showMessageDialog (null, texto, "Información Archivo", 3);
+
     }
-   
-    public String validarCorreo(String correo) 
-    {
-        
+
+    public String validarCorreo(String correo) {
+
         String resultado = "\nCorreo: ";
         String codicion = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,3}$";
-        
+
         Pattern patron = Pattern.compile(codicion);
         if (patron.matcher(correo).matches())
         {
@@ -54,49 +50,78 @@ public class Validar {
         }
         return resultado;
     }
-    
-    
-    public String validarTelefono(String telefono)
-    {
-        String resultado="\nTeléfono: ", codicion = "^[3]+\\d{9}$";
+
+    public String validarTelefono(String telefono) {
+        String resultado = "\nTeléfono: ", codicion = "^[3] +\\d{9}$";
         Pattern patron = Pattern.compile(codicion);
-        
-        if(patron.matcher(telefono).matches())
+
+        if (patron.matcher(telefono).matches())
         {
-            resultado = resultado+telefono+"   -->Válido!";
-        }else
+            resultado = resultado + telefono + "   -->Válido!";
+        } else
         {
-            resultado = resultado +telefono+"  -->Inválido -->X";
+            resultado = resultado + telefono + "  -->Inválido -->X";
         }
         return resultado;
     }
-    
-    
-    public String validarMaterias(String materia)
-    {
-        String resultado="\nMateria: "; 
+
+    public String validarMaterias(String materia) {
+        String resultado = "\nMateria: ";
         String codicion = "^(ING)\\d{4,8}$";
         Pattern patron = Pattern.compile(codicion);
-        
-        if(patron.matcher(materia).matches())
+
+        if (patron.matcher(materia).matches())
         {
-            resultado = resultado+materia+"   -->Válido!";
-        }else
+            resultado = resultado + materia + "   -->Válido!";
+        } else
         {
-            resultado = resultado +materia+"  -->Inválido -->X";
+            resultado = resultado + materia + "  -->Inválido -->X";
         }
         return resultado;
     }
-    public void validarHoraNacimiento()
-    {
-    
-    }
-    public void validarFechaNacimiento()
-    {
+
+    public String validarHoraNacimiento(String hora) {
+        String resultado = "\nHora de nacimiento: ";
+        String codicion = "^(0[1-9]|1[0-2]):[0-5][0-9] (PM|AM)$";
+        Pattern patron = Pattern.compile(codicion);
+
+        if (patron.matcher(hora).matches())
+        {
+            resultado = resultado + hora + "   -->Válido!";
+        } else
+        {
+            resultado += hora + "  -->Inválido -->X";
+        }
+        return resultado;
         
     }
+
+    public String validarFechaNacimiento(String fecha) {
+        String resultado = "\nHora de nacimiento: ";
+        String codicion = "^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/\\d{4}$";
+        Pattern patron = Pattern.compile(codicion);
+
+        if (patron.matcher(fecha).matches())
+        {
+            resultado = resultado + fecha + "   -->Válido!";
+        } else
+        {
+            resultado += fecha + "  -->Inválido -->X";
+        }
+        return resultado;
+
+    }
+
+    public void validarUsuario() {
+
+    }
+
+    public void validarContraseña() {
+
+    }
+
     public void validarDatos(String archivo) {
-        
+
         try ( BufferedReader leer = new BufferedReader(new FileReader(archivo)))
         {
 
@@ -104,16 +129,10 @@ public class Validar {
 
             while (linea != null) //mientras haya lineas
             {
-                try
-                {
-                    String []campos= linea.split(",|;"); //vector con cada uno de los datos del usuario
-                    mostrarInformacion(campos);
-
-                } catch (ArrayIndexOutOfBoundsException e)
-                {
-                    JOptionPane.showMessageDialog(null, "Falta un campo", "Campo inexistente", 2);
-                }
                 
+                String[] campos = linea.split(",|;"); //vector con cada uno de los datos del usuario
+                mostrarInformacion(campos);
+
                 linea = leer.readLine();// Leer la siguiente línea 
             }
         } catch (IOException e)
@@ -121,44 +140,57 @@ public class Validar {
             e.printStackTrace();
         }
 
- 
-  }
-    
-    public void mostrarInformacion(String []s)
-    {
-        String concatenar=s[0]; //nombre
+    }
+
+    public void mostrarInformacion(String[] s) {
+        String concatenar = "";
         int i;
-        for(i=1;i<=8;i++)
+        for (i = 0; i <= 8; i++)
         {
-            switch(i)
+            switch (i)
             {
-                case 1->
+                case 0->
                 {
-                    String telefono=s[1].trim();
-                    concatenar=concatenar+validarTelefono(telefono);
+                 String nombre= s[0];
+                 nombre= nombre.replaceAll("\\s+"," ");
+                 concatenar= nombre;                     
+                }
+                case 1 ->
+                {
+                    String telefono = s[1].trim();
+                    concatenar = concatenar + validarTelefono(telefono);
                 }
                 case 2 ->
                 {
-                    String correo=s[2].trim();
-                    concatenar= concatenar + validarCorreo(correo);
+                    String correo = s[2].trim();
+                    concatenar = concatenar + validarCorreo(correo);
+
+                }
+                case 3 ->
+                {
+                    String materia1 = s[3].trim();// trim() funcion para eliminar espacios 
+                    String materia2 = s[4].trim();
+                    concatenar = concatenar + validarMaterias(materia1);
+                }
+                case 4 ->
+                {
+                    String materia2 = s[4].trim();
+                    concatenar = concatenar + validarMaterias(materia2);
+                }
+                case 5 ->
+                {
+                   String fechaNacimiento=s[5].trim();
+                   concatenar+= validarFechaNacimiento(fechaNacimiento);
+                }
+                case 6 ->
+                {
+                   String hora=s[6].trim();
+                   concatenar+= validarHoraNacimiento(hora);
                     
                 }
-                case 3->
-                {
-                    String materia1=s[3].trim();
-                    String materia2=s[4].trim();
-                    concatenar= concatenar + validarMaterias(materia1);  
-                }
-                case 4->
-                {
-                    String materia2=s[4].trim();
-                    concatenar= concatenar+validarMaterias(materia2);
-                }
-                
+
             }
         }
         JOptionPane.showMessageDialog(null, concatenar, "Información de usuario", 3);
     }
 }
-
-

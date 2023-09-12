@@ -1,4 +1,4 @@
-Juan José, 3024561235, juan@gmail.com, ING1234, ING5678, 01/01/2000, 10:00, juan123, abc123;
-Ana María, 0987654321; ana@hotmail.com, ING2345, ING6789, 02/02/2001, 11:00; ana456, def456;
-Pedro; 0123456789, pedro@yahoo.com; ING3456; ING7890, 03/03/2002, 18:00, pedro789, ghi789,
-Luis; 012345342; lioshoo.com, IN3456, ING780, 03/30/2032; 16:00, Luis789; ghi789;
+Juan  José, 3024561235, juan@gmail.com, ING1234, ING5678, 01/01/2000, 10:56 AM, juan123, abc123;
+Ana  María, 0987654321; ana@hotmail.com, ING2345, ING6789, 02/02/2001, 9:00:66 AM; ana456, def456;
+Pedro; 0123456789, pedro@yahoo.com; ING3456; ING7890, 03/03/2002, 11:44:45 PM, pedro789, ghi789,
+Luis; 012345342; lioshoo.com, IN3456, ING780, 03/03/2032; 04:10:55, Luis789; ghi789,
