@@ -97,7 +97,7 @@ public class Validar {
     }
 
     public String validarFechaNacimiento(String fecha) {
-        String resultado = "\nHora de nacimiento: ";
+        String resultado = "\nFecha de nacimiento: ";
         String codicion = "^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/\\d{4}$";
         Pattern patron = Pattern.compile(codicion);
 
@@ -112,7 +112,21 @@ public class Validar {
 
     }
 
-    public void validarUsuario() {
+    public String validarUsuario(String usuario) {
+       String resultado = "\nFecha de nacimiento: ";
+        String codicion = "^[\\w]{6,15}";
+        Pattern patron = Pattern.compile(codicion);
+
+        if (patron.matcher(usuario).matches())
+        {
+            resultado = resultado + usuario + "   -->Válido!";
+        } else
+        {
+            resultado += usuario + "  -->Inválido -->X";
+        }
+        return resultado; 
+        
+        //
 
     }
 
@@ -187,6 +201,11 @@ public class Validar {
                    String hora=s[6].trim();
                    concatenar+= validarHoraNacimiento(hora);
                     
+                }
+                case 7 ->
+                {
+                    String usuario=s[7].trim();
+                    concatenar+=validarUsuario(usuario);
                 }
 
             }
