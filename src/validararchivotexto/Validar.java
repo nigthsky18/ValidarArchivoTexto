@@ -6,9 +6,11 @@ package validararchivotexto;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 
@@ -146,7 +148,7 @@ public class Validar {
 
     }
 
-    public void validarDatos(String archivo, boolean b) {
+    public void validarDatos(String archivo) {
 
         try ( BufferedReader leer = new BufferedReader(new FileReader(archivo)))
         {
@@ -157,13 +159,9 @@ public class Validar {
             {
 
                 String[] campos = linea.split(",|;"); //vector con cada uno de los datos del usuario
-                if (!b) //si es la op 2
-                {
+               
                     mostrarInformacion(campos);
-                } else //si es la op 3
-                {
-                    //editarArchivo(linea);
-                }
+                
 
                 linea = leer.readLine();// Leer la siguiente línea 
             }
@@ -237,33 +235,37 @@ public class Validar {
         JOptionPane.showMessageDialog(null, concatenar, "Información de usuario", 3);
     }
 
-//    public void editarArchivo(String linea)  {
-//
-//        String[] campos = linea.split(",|;");
-//        String[] lineas = new String[8];
-//        try{
-//        BufferedWriter bw = new BufferedWriter(new FileWriter("Archivo.txt"));     
-//        for (int i = 0; i < 8; i++)
-//        {
-//            switch (i)
-//            {
-//                case 0, 7,8 ->
-//                {
-//                        campos[i] = campos[i].replaceAll("s$", "c");
-//                }
-//            }
-//            
-//            bw.write(linea);
-//            bw.newLine();
-//        
-//        
-//        
-//        }
-//        bw.close();
-//        }catch(IOException e)
-//        {
-//           e.printStackTrace();
-//        }
-//
-//    }
+public void editarArchivo(String archivo) {
+    try {
+        BufferedReader leer = new BufferedReader(new FileReader(archivo));
+        String linea = leer.readLine();
+        ArrayList<String> lineas = new ArrayList<>();
+
+        while (linea != null) {
+            String[] campos = linea.split("[,;]"); 
+            for (int i = 0; i < campos.length; i++) {
+               
+                    campos[i] = campos[i].replaceAll("s$", "c");
+                
+            }
+            //String.join toma un vector y las une todas en un solo string utilizando un separador (delimitador) 
+            lineas.add(String.join(",", campos)); // Volver a unir los campos con comas
+            linea = leer.readLine(); 
+        }
+        leer.close();
+
+        // pasar la nueva linea al archivo
+        BufferedWriter escribir = new BufferedWriter(new FileWriter(archivo));
+        for (String lineaModificada : lineas) {
+            escribir.write(lineaModificada);
+            escribir.newLine();
+        }
+
+        escribir.close();
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+    mostrarArchivo(archivo);
 }
+}
+
