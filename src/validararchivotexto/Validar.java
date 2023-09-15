@@ -177,7 +177,7 @@ public class Validar {
     public void mostrarInformacion(String[] s) {
         String concatenar = "";
         int i;
-        for (i = 0; i < 8; i++)
+        for (i = 0; i <= 8; i++)
         {
             switch (i)
             {
