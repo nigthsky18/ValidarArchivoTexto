@@ -5,7 +5,9 @@
 package validararchivotexto;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
@@ -52,7 +54,7 @@ public class Validar {
     }
 
     public String validarTelefono(String telefono) {
-        String resultado = "\nTeléfono: ", codicion = "^[3] +\\d{9}$";
+        String resultado = "\nTeléfono: ", codicion = "^[3]+\\d{9}$";
         Pattern patron = Pattern.compile(codicion);
 
         if (patron.matcher(telefono).matches())
@@ -67,7 +69,7 @@ public class Validar {
 
     public String validarMaterias(String materia) {
         String resultado = "\nMateria: ";
-        String codicion = "^(ING)\\d{4,8}$";
+        String codicion = "^(ING)\\d{4}$";
         Pattern patron = Pattern.compile(codicion);
 
         if (patron.matcher(materia).matches())
@@ -82,7 +84,7 @@ public class Validar {
 
     public String validarHoraNacimiento(String hora) {
         String resultado = "\nHora de nacimiento: ";
-        String codicion = "^(0[1-9]|1[0-2]):[0-5][0-9] (PM|AM)$";
+        String codicion = "^(0[1-9]|1[0-2]):[0-5][0-9] (PM|AM)$"; //HH:MM AM|PM
         Pattern patron = Pattern.compile(codicion);
 
         if (patron.matcher(hora).matches())
@@ -93,12 +95,12 @@ public class Validar {
             resultado += hora + "  -->Inválido -->X";
         }
         return resultado;
-        
+
     }
 
     public String validarFechaNacimiento(String fecha) {
         String resultado = "\nFecha de nacimiento: ";
-        String codicion = "^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/\\d{4}$";
+        String codicion = "^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/\\d{4}$"; //DD/MM/AAAA
         Pattern patron = Pattern.compile(codicion);
 
         if (patron.matcher(fecha).matches())
@@ -113,7 +115,7 @@ public class Validar {
     }
 
     public String validarUsuario(String usuario) {
-       String resultado = "\nFecha de nacimiento: ";
+        String resultado = "\nUsuario: ";
         String codicion = "^[\\w]{6,15}";
         Pattern patron = Pattern.compile(codicion);
 
@@ -124,17 +126,27 @@ public class Validar {
         {
             resultado += usuario + "  -->Inválido -->X";
         }
-        return resultado; 
-        
-        //
+        return resultado;
 
     }
 
-    public void validarContraseña() {
+    public String validarContraseña(String contraseña) {
+        String resultado = "\nContraseña: ";
+        String codicion = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,15}$";
+        Pattern patron = Pattern.compile(codicion);
+
+        if (patron.matcher(contraseña).matches())
+        {
+            resultado = resultado + contraseña + "   -->Válido!";
+        } else
+        {
+            resultado += contraseña + "  -->Inválido -->X";
+        }
+        return resultado;
 
     }
 
-    public void validarDatos(String archivo) {
+    public void validarDatos(String archivo, boolean b) {
 
         try ( BufferedReader leer = new BufferedReader(new FileReader(archivo)))
         {
@@ -143,9 +155,15 @@ public class Validar {
 
             while (linea != null) //mientras haya lineas
             {
-                
+
                 String[] campos = linea.split(",|;"); //vector con cada uno de los datos del usuario
-                mostrarInformacion(campos);
+                if (!b) //si es la op 2
+                {
+                    mostrarInformacion(campos);
+                } else //si es la op 3
+                {
+                    //editarArchivo(linea);
+                }
 
                 linea = leer.readLine();// Leer la siguiente línea 
             }
@@ -159,15 +177,15 @@ public class Validar {
     public void mostrarInformacion(String[] s) {
         String concatenar = "";
         int i;
-        for (i = 0; i <= 8; i++)
+        for (i = 0; i < 8; i++)
         {
             switch (i)
             {
-                case 0->
+                case 0 ->
                 {
-                 String nombre= s[0];
-                 nombre= nombre.replaceAll("\\s+"," ");
-                 concatenar= nombre;                     
+                    String nombre = s[0];
+                    nombre = nombre.replaceAll("\\s+", " ");
+                    concatenar = nombre;
                 }
                 case 1 ->
                 {
@@ -193,23 +211,59 @@ public class Validar {
                 }
                 case 5 ->
                 {
-                   String fechaNacimiento=s[5].trim();
-                   concatenar+= validarFechaNacimiento(fechaNacimiento);
+                    String fechaNacimiento = s[5].trim();
+                    concatenar += validarFechaNacimiento(fechaNacimiento);
                 }
                 case 6 ->
                 {
-                   String hora=s[6].trim();
-                   concatenar+= validarHoraNacimiento(hora);
-                    
+                    String hora = s[6].trim();
+                    concatenar += validarHoraNacimiento(hora);
+
                 }
                 case 7 ->
                 {
-                    String usuario=s[7].trim();
-                    concatenar+=validarUsuario(usuario);
+                    String usuario = s[7].trim();
+                    concatenar += validarUsuario(usuario);
+                }
+                case 8 ->
+                {
+                    String contraseña = s[8].trim();
+                    concatenar += validarContraseña(contraseña);
+
                 }
 
             }
         }
         JOptionPane.showMessageDialog(null, concatenar, "Información de usuario", 3);
     }
+
+//    public void editarArchivo(String linea)  {
+//
+//        String[] campos = linea.split(",|;");
+//        String[] lineas = new String[8];
+//        try{
+//        BufferedWriter bw = new BufferedWriter(new FileWriter("Archivo.txt"));     
+//        for (int i = 0; i < 8; i++)
+//        {
+//            switch (i)
+//            {
+//                case 0, 7,8 ->
+//                {
+//                        campos[i] = campos[i].replaceAll("s$", "c");
+//                }
+//            }
+//            
+//            bw.write(linea);
+//            bw.newLine();
+//        
+//        
+//        
+//        }
+//        bw.close();
+//        }catch(IOException e)
+//        {
+//           e.printStackTrace();
+//        }
+//
+//    }
 }

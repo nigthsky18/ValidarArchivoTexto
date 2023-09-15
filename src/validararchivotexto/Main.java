@@ -29,11 +29,12 @@ public class Main {
                 }
                 case 2->
                 {
-                    documento.validarDatos(archivo);
+                    documento.validarDatos(archivo,false);
                 }
                 case 3->
                 {
-                    
+                    documento.validarDatos(archivo,true);
+                    documento.mostrarArchivo(archivo);
                 }
                 case 0->{}
             }
