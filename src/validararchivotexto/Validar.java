@@ -56,7 +56,7 @@ public class Validar {
     }
 
     public String validarTelefono(String telefono) {
-        String resultado = "\nTeléfono: ", codicion = "^[3]+\\d{9}$";
+        String resultado = "\nTeléfono: ", codicion = "^[3|6]+\\d{9}$";
         Pattern patron = Pattern.compile(codicion);
 
         if (patron.matcher(telefono).matches())
@@ -134,8 +134,8 @@ public class Validar {
 
     public String validarContraseña(String contraseña) {
         String resultado = "\nContraseña: ";
-        String codicion = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,15}$";
-        Pattern patron = Pattern.compile(codicion);
+        String condicion = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,15}$";
+        Pattern patron = Pattern.compile(condicion);
 
         if (patron.matcher(contraseña).matches())
         {
@@ -159,9 +159,8 @@ public class Validar {
             {
 
                 String[] campos = linea.split(",|;"); //vector con cada uno de los datos del usuario
-               
-                    mostrarInformacion(campos);
-                
+
+                mostrarInformacion(campos);
 
                 linea = leer.readLine();// Leer la siguiente línea 
             }
@@ -235,37 +234,41 @@ public class Validar {
         JOptionPane.showMessageDialog(null, concatenar, "Información de usuario", 3);
     }
 
-public void editarArchivo(String archivo) {
-    try {
-        BufferedReader leer = new BufferedReader(new FileReader(archivo));
-        String linea = leer.readLine();
-        ArrayList<String> lineas = new ArrayList<>();
+    public void editarArchivo(String archivo) {
+        try
+        {
+            BufferedReader leer = new BufferedReader(new FileReader(archivo));
+            String linea = leer.readLine();
+            ArrayList<String> lineas = new ArrayList<>();
 
-        while (linea != null) {
-            String[] campos = linea.split("[,;]"); 
-            for (int i = 0; i < campos.length; i++) {
-               
+            while (linea != null)
+            {
+                String[] campos = linea.split("[,;]");
+                for (int i = 0; i < campos.length; i++)
+                {
+
                     campos[i] = campos[i].replaceAll("s$", "c");
-                
+
+                }
+                //String.join toma las palabras del vector y las une todas en un solo string utilizando un separador (delimitador) 
+                lineas.add(String.join(",", campos)); // Volver a unir los campos con comas
+                linea = leer.readLine();
             }
-            //String.join toma un vector y las une todas en un solo string utilizando un separador (delimitador) 
-            lineas.add(String.join(",", campos)); // Volver a unir los campos con comas
-            linea = leer.readLine(); 
-        }
-        leer.close();
+            leer.close();
 
-        // pasar la nueva linea al archivo
-        BufferedWriter escribir = new BufferedWriter(new FileWriter(archivo));
-        for (String lineaModificada : lineas) {
-            escribir.write(lineaModificada);
-            escribir.newLine();
-        }
+            // pasar la nueva linea al archivo
+            BufferedWriter escribir = new BufferedWriter(new FileWriter(archivo));
+            for (String lineaModificada : lineas)
+            {
+                escribir.write(lineaModificada);
+                escribir.newLine();
+            }
 
-        escribir.close();
-    } catch (IOException e) {
-        e.printStackTrace();
+            escribir.close();
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        mostrarArchivo(archivo);
     }
-    mostrarArchivo(archivo);
 }
-}
-
